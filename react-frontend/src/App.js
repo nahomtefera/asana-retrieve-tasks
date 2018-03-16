@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import logo from './images/Logo-Horizontal-Color.png';
-import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
-import createBrowserHistory from 'history/createBrowserHistory';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './App.css';
 
+
+const About = () => (
+  <div>
+    <h2>About</h2>
+  </div>
+);
 
 class App extends Component {
   state = {projects: []}
@@ -20,14 +25,24 @@ class App extends Component {
         <header>
           <img src={logo}/>
         </header>
+        <Router>
+          <div>
+            <ul className="projects-list">
+              
+              {this.state.projects.map(project=>
 
-        <ul className="projects-list">
-          
-          {this.state.projects.map(project=>
-            <li className="projects-list-item" key={project.id}> {project.name} </li>    
-          )}
+                <li className="projects-list-item" id={project.id} key={project.id}> 
+                
+                  <Link to={`/${project.id}`}>{ project.name}</Link>
+                  <Route path={`/${project.id}`} component={About} />
 
-        </ul>
+                </li>    
+
+              )}
+
+            </ul>
+          </div>
+        </Router>
 
       </div>
     );
