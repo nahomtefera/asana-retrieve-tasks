@@ -5,9 +5,29 @@ import './App.css';
 
 
 class App extends Component {
-  state = {
-    projects: [],
-    tasks: []
+
+  constructor() {
+    super();
+    this.state = {
+      projects: [],
+      tasks: []
+    }
+
+    this.deleteTask = this.deleteTask.bind(this);
+  }
+
+  deleteTask(event) {
+    let prevTasks = this.state.tasks;
+
+    for(var i=0; i<prevTasks.length; i++) {
+      if(prevTasks[i].id == event.target.id) {
+        prevTasks.splice(i, 1);
+      }
+    }
+
+    this.setState({
+      tasks: prevTasks
+    })
   }
 
   componentDidMount() {
@@ -43,18 +63,20 @@ class App extends Component {
     return (
       <div className="App">
         <header>
+          
           <img className="asana-logo" src={logo}/>
+          
         </header>
+
         <Router>
           <div>
             <ul className="projects-list">
               
               {this.state.projects.map(project=>
-                <div>
+                <div  key={project.id}>
                     <Link to={`/${project.id}`}>
-                      <li className="projects-list-item" id={project.id} key={project.id}> 
-
-                      { project.name}
+                      <li className="projects-list-item" id={project.id}> 
+                        { project.name}
                       </li>  
                     </Link>
 
@@ -64,7 +86,10 @@ class App extends Component {
                         <ul className="tasks-list">
                           {this.state.tasks.map(task=>{
                             if(task.parent === project.id) {
-                              return <li className="tasks-list-items"> {task.name} </li>
+                              return <li key={task.id} className="tasks-list-items"> 
+                                {task.name} 
+                                <div className="rem-button" id={task.id} onClick={this.deleteTask}>X</div>
+                              </li>
                             } else {
                               return
                             }
