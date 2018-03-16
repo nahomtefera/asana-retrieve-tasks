@@ -5,19 +5,13 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import './App.css';
 
 
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-);
-
 class App extends Component {
-  state = {users: []}
+  state = {projects: []}
 
   componentDidMount() {
     fetch('/projects')
       .then(res => res.json())
-      .then(users => this.setState({ users }));
+      .then(projects => this.setState({ projects }));
   }
 
   render() {
@@ -27,9 +21,13 @@ class App extends Component {
           <img src={logo}/>
         </header>
 
-        <Router>
+        <ul className="projects-list">
           
-        </Router>
+          {this.state.projects.map(project=>
+            <li className="projects-list-item" key={project.id}> {project.name} </li>    
+          )}
+
+        </ul>
 
       </div>
     );
