@@ -6,6 +6,10 @@
   text-align: center;
 }
 
+.asana-logo {
+  max-width: 600px;
+}
+
 .projects-list {
   list-style: none;
   display: inline-block;
@@ -21,8 +25,32 @@
   border: 2px solid rgb(121, 178, 180);
 }
 
+.projects-list a{
+  text-decoration: none;
+  color: #333;
+}
+
 .projects-list-item:hover {
   background: rgb(121, 178, 180);
+  color: white;
+  cursor: pointer;
+}
+
+.tasks-list {
+  list-style: none;
+  padding: 0;
+}
+
+.tasks-list-items {
+  padding: 13px;
+  border: 2px solid #fb7864;
+  text-decoration: none;
+  margin: 12px 35px;  font-size: 1.4em;
+  font-family: 'Raleway', sans-serif;
+}
+
+.tasks-list-items:hover {
+  background: #fb7864;
   color: white;
   cursor: pointer;
 }

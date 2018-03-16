@@ -4,10 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var asana = require('asana');
+var util = require('util');
+
+var client = asana.Client.create().useAccessToken('0/bcddabca69ab6f3f02d7a924fe82a45b');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
 var projects = require('./routes/projects');
+var tasks = require('./routes/tasks');
 
 var app = express();
 
@@ -25,7 +30,35 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/projects', projects)
+app.use('/projects', projects);
+
+app.use('/tasks/:projectId', function(req, res, next) {
+  var data = req.params;
+  // Comment out this line:
+  //res.send('respond with a resource');
+
+  // And insert something like this instead:
+  client.users.me().then(function(user) {
+    var userId = user.id;
+    var workspaceId = user.workspaces[1].id;
+
+    return client.tasks.findByProject(data.projectId);
+  })
+  .then(function(response){
+    return response.data;
+  })
+  .filter(function(task) {
+    return task
+  })
+  .then(function(list) {
+    console.log(util.inspect(list, {
+        colors:true,
+        depth:null
+    }));
+
+    res.send(list);
+  });
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
