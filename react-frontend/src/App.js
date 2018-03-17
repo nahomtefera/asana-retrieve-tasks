@@ -8,6 +8,9 @@ class App extends Component {
 
   constructor() {
     super();
+    // We will store projects ands tasks in the state
+    // Tasks will have a parent property that will have the id
+    // Of the project they belong to
     this.state = {
       projects: [],
       tasks: []
@@ -15,6 +18,36 @@ class App extends Component {
 
     this.deleteTask = this.deleteTask.bind(this);
   }
+
+  componentDidMount() {
+    var allProjects = []; // We will store projects fetched
+    var allTasks = [];  // We will store tasks fetched
+
+    fetch('/projects')
+        .then(res => res.json())
+        .then(projects => projects.map(project=>{
+          // We map through every project 
+          // First we will push each project to our store
+          allProjects.push(project);
+          // Second we will fetch every task in each project
+          fetch('/tasks/asana/' + project.id)
+          .then(res=>res.json())
+          .then(tasks => tasks.map(task => {
+            // Then we map through the tasks
+            // Add a parent property to each task
+            // And push them to our store
+            task.parent = project.id;
+            allTasks.push(task)
+          }))
+          .then(this.setState({
+            // Now our state will have all projects
+            // And tasks
+            projects: allProjects,
+            tasks: allTasks
+          }))
+        }));
+  }
+
   // Function that will be called 
   // When the user wants to hide a task
   deleteTask(event) {
@@ -37,47 +70,18 @@ class App extends Component {
     })
   }
 
-  componentDidMount() {
-    var allProjects = []; // We will store projects fetched
-    var allTasks = [];  // We will store tasks fetched
-
-    fetch('/projects')
-        .then(res => res.json())
-        .then(projects => projects.map(project=>{
-          // We map through every project 
-          // First we will push each project to our store
-          allProjects.push(project);
-          // Second we will fetch every task in each project
-          fetch('/tasks/'+project.id)
-          .then(res=>res.json())
-          .then(tasks => tasks.map(task => {
-            // Then we map through the tasks
-            // Add a parent property to each task
-            // And push them to our store
-            task.parent = project.id;
-            allTasks.push(task)
-          }))
-          .then(this.setState({
-            // Now our state will have all projects
-            // And tasks
-            projects: allProjects,
-            tasks: allTasks
-          }))
-        }));
-  }
-
   render() {
     return (
       <div className="App">
-        {/* Main logo, top left */}
-        <header>          
+        <header>
+          {/* Main logo, top left */}          
           <a target="_blank" href="https://app.asana.com">
             <img className="asana-logo" src={logo}/>
           </a>
         </header>
         {/* 
           We start writting our app
-          
+          We will have a route for every task
         */}
         <Router>
           <div className="app-container">
@@ -101,13 +105,13 @@ class App extends Component {
                       Link elements will change the route
                       To localhost:xxxx/projectId
                     */}
-                    <Link to={`/${project.id}`}>
+                    <Link to={`/asana/${project.id}`}>
                       <li className="projects-list-item" id={project.id}> 
                         { project.name}
                       </li>  
                     </Link>
                     {/* Routes will have a list with the tasks for each project*/}
-                    <Route path={`/${project.id}`} render={() => (
+                    <Route path={`/asana/${project.id}`} render={() => (
                       <div className="tasks-list-container">
                         <ul className="tasks-list">
                           {/* 

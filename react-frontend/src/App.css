@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nanum+Gothic');
 
 body {
-  background: #f7f7f7eb;
+  background: #f7f7f7a6;
 }
 
 .App {
@@ -27,14 +27,13 @@ header {
   font-weight: normal;
   margin: 0;
   color: #2e3c54;
-  /* text-transform: uppercase; */
 } 
 
 .projects-list {
   list-style: none;
   display: inline-block;
   padding: 0;
-  width: 600px;
+  max-width: 600px;
 }
 
 .projects-list-item {

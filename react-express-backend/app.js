@@ -31,7 +31,7 @@ app.use('/', index);
 app.use('/projects', projects);
 
 // Task API, will retrieve task by projectId
-app.get('/tasks/:projectId', function(req, res, next) {
+app.get('/tasks/asana/:projectId', function(req, res, next) {
   var data = req.params;
 
   client.users.me().then(function(user) {
