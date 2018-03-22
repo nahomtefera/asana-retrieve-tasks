@@ -86,7 +86,7 @@ class App extends Component {
         <Router>
           <div className="app-container">
             <h3 className="projects-title">
-              <Link to="/">current projects </Link>
+              <Link to="/asana">current projects </Link>
             </h3>
             {/* 
                 The app will show every project
